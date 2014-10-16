@@ -1,5 +1,5 @@
 CONFIG += debug
 QT += widgets
 
-SOURCES += drawwidget.cpp main.cpp
-HEADERS += drawwidget.h
+SOURCES += drawwidget.cpp distarray.cpp main.cpp
+HEADERS += drawwidget.h distarray.h
