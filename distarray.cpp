@@ -29,8 +29,7 @@ struct SortableIndexCompare2D {
 };
 
 void fillDistanceArray(PixelArray const &array,
-                       qreal            *distArray,
-                       bool              reverse)
+                       qreal            *distArray)
 /* We expect that distArray points to a memory of the same
  * size as array.pixels. */
 {
@@ -42,7 +41,7 @@ void fillDistanceArray(PixelArray const &array,
 
     for (num = 0; num < elementsCount; ++num) {
         QPoint currentInd = array.index2d(num);
-        if (array.pixels[num] != reverse) {
+        if (array.pixels[num]) {
             distArray[num] = 0;
             processSet.insert(SortableIndex2D(
                               currentInd, array, distArray));

@@ -37,7 +37,6 @@ struct PixelArray {
 };
 
 void fillDistanceArray(PixelArray const &array,
-                       qreal            *distArray,
-                       bool             reverse = false);
+                       qreal            *distArray);
 
 #endif /* __DISTARRAY_H */
