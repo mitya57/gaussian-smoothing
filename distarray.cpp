@@ -69,7 +69,7 @@ void fillDistanceArray(PixelArray const &array,
         for (unsigned char j = 0; j < 9; ++j) {
             QPoint diff(j % 3,   j / 3);
             if (
-                j == 5 || /* equal to currentInd */
+                j == 4 || /* equal to currentInd */
                 !(currentInd.x() || diff.x()) ||
                 !(currentInd.y() || diff.y())
             ) {
