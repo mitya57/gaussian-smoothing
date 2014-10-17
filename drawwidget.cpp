@@ -13,7 +13,11 @@ void DrawWidget::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void DrawWidget::mousePressEvent(QMouseEvent *event) {
-    painterPath.moveTo(event->localPos());
+    if (event->button() == Qt::RightButton) {
+      smooth();
+    } else {
+      painterPath.moveTo(event->localPos());
+    }
 }
 
 void DrawWidget::smooth() {
