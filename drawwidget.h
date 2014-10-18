@@ -11,4 +11,9 @@ private:
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void smooth();
+public:
+    DrawWidget(QSize size, QWidget *parent = 0):
+    QWidget(parent) {
+        setFixedSize(size);
+    }
 };
