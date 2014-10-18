@@ -8,6 +8,7 @@ class BitArray {
 private:
     typedef unsigned char Byte;
     Byte *data;
+    bool memoryAllocated;
 
     class Reference {
     private:
@@ -38,14 +39,17 @@ private:
 
 public:
     BitArray(Byte *_data):
-        data(_data) {}
+        data(_data), memoryAllocated(false) {}
     BitArray(size_t length):
-        data(new Byte[(length >> 3) + 1]) {
+        data(new Byte[(length >> 3) + 1]),
+        memoryAllocated(true) {
         memset(data, 0, (length >> 3) + 1);
     }
 
     ~BitArray() {
-        delete[] data;
+        if (memoryAllocated) {
+            delete[] data;
+        }
     }
 
     void setValue(size_t i, bool value) const {
