@@ -41,7 +41,7 @@ void fillDistanceArray(PixelArray const &array,
 
     for (num = 0; num < elementsCount; ++num) {
         QPoint currentInd = array.index2d(num);
-        if (array.pixels[num]) {
+        if (array[num]) {
             distArray[num] = 0;
             processSet.insert(SortableIndex2D(
                               currentInd, array, distArray));

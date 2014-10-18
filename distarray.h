@@ -5,9 +5,10 @@
 #include <QtCore/QPointF>
 #include <QtCore/QSize>
 #include <QtCore/QSizeF>
+#include "bitarray.h"
 
 struct PixelArray {
-    unsigned char const *pixels;
+    BitArray *pixels;
     QPointF start;
     QSizeF pixelSize;
     QSize size;
@@ -25,8 +26,11 @@ struct PixelArray {
             index / size.width()
         );
     }
-    inline unsigned char operator [](QPoint const &index) const {
-        return pixels[num(index)];
+    inline bool operator [](QPoint const &index) const {
+        return pixels->value(num(index));
+    }
+    inline bool operator [](unsigned index) const {
+        return pixels->value(index);
     }
     inline QPointF getPixelCenter(QPoint const &index) const {
         return QPointF(

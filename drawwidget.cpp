@@ -32,8 +32,10 @@ void DrawWidget::smooth() {
     unsigned width = image.width();
     unsigned height = image.height();
 
+    BitArray bitArray(image.bits());
+
     PixelArray array = {
-        image.constBits(),
+        &bitArray,
         QPointF(0., 0.),
         QSizeF(1., 1.),
         image.size()
