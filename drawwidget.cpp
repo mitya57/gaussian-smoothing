@@ -1,3 +1,4 @@
+#include <QtCore/QTextStream>
 #include <QtGui/QPainter>
 #include "drawwidget.h"
 #include "distarray.h"
@@ -33,6 +34,16 @@ void DrawWidget::smooth() {
     unsigned height = image.height();
 
     BitArray bitArray(image.bits());
+
+#ifndef NO_DEBUG
+    QTextStream cout(stdout);
+    for (unsigned i = 0; i < height; ++i) {
+        for (unsigned j = 0; j < width; ++j) {
+            cout << bitArray.value(i * width + j);
+        }
+        cout << endl;
+    }
+#endif
 
     PixelArray array = {
         &bitArray,
