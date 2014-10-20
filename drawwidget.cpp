@@ -5,45 +5,32 @@
 
 void DrawWidget::paintEvent(QPaintEvent *event) {
     Q_UNUSED(event);
-    QPainter(this).drawPath(painterPath);
+    QPainter(this).drawImage(rect(), image);
 }
 
 void DrawWidget::mouseMoveEvent(QMouseEvent *event) {
-    painterPath.lineTo(event->localPos());
+    QPainter painter;
+    painter.begin(&image);
+    painter.drawLine(previousPoint, event->pos());
+    painter.end();
     repaint();
+    previousPoint = event->pos();
 }
 
 void DrawWidget::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
-      smooth();
+        smooth();
     } else {
-      painterPath.moveTo(event->localPos());
+        previousPoint = event->pos();
     }
 }
 
 void DrawWidget::smooth() {
-    /* First, save the painter path to a QImage */
-    QImage image(size(), QImage::Format_Mono);
-    QPainter painter;
-    painter.begin(&image);
-    painter.drawPath(painterPath);
-    painter.end();
-
-    /* Then, extract the bits */
+    /* Extract the bits */
     unsigned width = image.width();
     unsigned height = image.height();
 
     BitArray bitArray(image.bits());
-
-#ifndef NO_DEBUG
-    QTextStream cout(stdout);
-    for (unsigned i = 0; i < height; ++i) {
-        for (unsigned j = 0; j < width; ++j) {
-            cout << bitArray.value(i * width + j);
-        }
-        cout << endl;
-    }
-#endif
 
     PixelArray array = {
         &bitArray,
