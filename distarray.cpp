@@ -65,6 +65,9 @@ void fillDistanceArray(PixelArray const &array,
          */
 
         SortableIndex2D const currentInd = *processSet.begin();
+        if (processSet.find(currentInd) == processSet.end()) {
+          return;
+        }
 
         for (unsigned char j = 0; j < 9; ++j) {
             QPoint diff(j % 3,   j / 3);

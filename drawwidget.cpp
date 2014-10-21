@@ -1,4 +1,5 @@
 #include <QtCore/QTextStream>
+#include <QtGui/QColor>
 #include <QtGui/QPainter>
 #include "drawwidget.h"
 #include "distarray.h"
@@ -27,8 +28,8 @@ void DrawWidget::mousePressEvent(QMouseEvent *event) {
 
 void DrawWidget::smooth() {
     /* Extract the bits */
-    unsigned width = image.width();
-    unsigned height = image.height();
+    int width = image.width();
+    int height = image.height();
 
     BitArray bitArray(image.bits());
 
@@ -46,5 +47,20 @@ void DrawWidget::smooth() {
     fillDistanceArray(array, distArray);
     QTextStream(stdout) << "Done!" << endl;
 
+    image = QImage(size(), QImage::Format_RGB32);
+
+    // FIXME: access pixel data directly, for speed
+    for (int i = 0; i < width; ++i) {
+        for (int j = 0; j < height; ++j) {
+            int index = j * width + i;
+            if (distArray[index] < -.5) {
+                image.setPixel(i, j, 0xeeeeff);
+            } else {
+                image.setPixel(i, j, QColor(Qt::white).darker(100 * distArray[index]).rgb());
+            }
+        }
+    }
+
     delete[] distArray;
+    repaint();
 }
