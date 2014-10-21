@@ -41,7 +41,10 @@ void DrawWidget::smooth() {
 
     /* And then create a distArray from it */
     qreal *distArray = new qreal[width * height];
+
+    QTextStream(stdout) << "Filling distance array..." << endl;
     fillDistanceArray(array, distArray);
+    QTextStream(stdout) << "Done!" << endl;
 
     delete[] distArray;
 }
