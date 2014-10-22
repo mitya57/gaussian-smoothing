@@ -1,8 +1,18 @@
+#include <cmath>
 #include <QtCore/QTextStream>
 #include <QtGui/QColor>
 #include <QtGui/QPainter>
 #include "drawwidget.h"
 #include "distarray.h"
+
+static const double sigma = 1;
+static const int radius = 5;
+static const int diameter = 2 * radius + 1;
+
+double gaussianFilter(double x, double y) {
+    return exp(-(x * x + y * y) / (2 * sigma * sigma)) /
+           (sigma * sqrt(2 * M_PI));
+}
 
 void DrawWidget::paintEvent(QPaintEvent *event) {
     Q_UNUSED(event);
@@ -42,9 +52,28 @@ void DrawWidget::smooth() {
 
     /* And then create a distArray from it */
     qreal *distArray = new qreal[width * height];
+    qreal *gaussArray = new qreal[width * height];
+    memset(gaussArray, 0, width * height * sizeof(qreal));
 
     QTextStream(stdout) << "Filling distance array..." << endl;
     fillDistanceArray(array, distArray);
+
+    /* Apply Gaussian filter */
+    QTextStream(stdout) << "Applying Gaussian filter..." << endl;
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width; ++j) {
+            for (int k = 0; k < diameter * diameter; ++k) {
+                int diff_i = (k / diameter) - radius;
+                int diff_j = (k % diameter) - radius;
+                int new_i = i + diff_i;
+                int new_j = j + diff_j;
+                if (new_i > 0 && new_i < height && new_j > 0 && new_j < height) {
+                    gaussArray[i * width + j] +=
+                        distArray[new_i * width + new_j] * gaussianFilter(diff_i, diff_j);
+                }
+            }
+        }
+    }
     QTextStream(stdout) << "Done!" << endl;
 
     image = QImage(size(), QImage::Format_RGB32);
@@ -53,14 +82,11 @@ void DrawWidget::smooth() {
     for (int i = 0; i < width; ++i) {
         for (int j = 0; j < height; ++j) {
             int index = j * width + i;
-            if (distArray[index] < -.5) {
-                image.setPixel(i, j, 0xeeeeff);
-            } else {
-                image.setPixel(i, j, QColor(Qt::white).darker(100 * distArray[index]).rgb());
-            }
+            image.setPixel(i, j, QColor(Qt::white).darker(100 * gaussArray[index]).rgb());
         }
     }
 
     delete[] distArray;
+    delete[] gaussArray;
     repaint();
 }
