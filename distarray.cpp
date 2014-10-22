@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <QtCore/qmath.h>
 #include <QtCore/QList>
+#include <QtCore/QTextStream>
 #include "distarray.h"
 
 void fillDistanceArray(PixelArray const &array,
@@ -36,6 +37,11 @@ void fillDistanceArray(PixelArray const &array,
          *    and move them if already there
          * 3) remove currentInd from the set
          */
+
+#ifndef NO_DEBUG
+        QTextStream(stdout) << "\rRemaining points to process: "
+                            << processList.size();
+#endif
 
         std::sort(processList.begin(), processList.end(),
                   [&distArray](unsigned num1, unsigned num2) -> bool {
@@ -84,4 +90,7 @@ void fillDistanceArray(PixelArray const &array,
         }
         processList.pop_front();
     }
+#ifndef NO_DEBUG
+    QTextStream(stdout) << "\rAll points processed successfully!" << endl;
+#endif
 }
