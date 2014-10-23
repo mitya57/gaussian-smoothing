@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
     QObject::connect(&smoothAction, &QAction::triggered, [&]() {
         smoothAction.setEnabled(false);
         drawWidget.smooth();
-        fillArrayAction.setEnabled(true);
+        drawWidget.setEnabled(false);
     });
 
     QToolBar toolBar;

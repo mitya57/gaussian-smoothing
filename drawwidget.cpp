@@ -65,11 +65,11 @@ void DrawWidget::invertSign(QPoint const &point) {
                 processQueue.enqueue(neighbourNum);
             }
         }
-        bitArray.setValue(num, !bitArray.value(num));
+      //bitArray.setValue(num, !bitArray.value(num));
         distArray[num] = -distArray[num];
         processedSet.insert(num);
     }
-    repaint();
+  //repaint();
 }
 
 void DrawWidget::fillArray() {
@@ -103,6 +103,18 @@ void DrawWidget::smooth() {
         }
     }
     QTextStream(stdout) << "Done!" << endl;
+
+    image = QImage(size(), QImage::Format_RGB32);
+
+    // FIXME: access pixel data directly, for speed
+    // or draw this properly using triangulation
+    for (int i = 0; i < width(); ++i) {
+        for (int j = 0; j < height(); ++j) {
+            int index = i * width() + j;
+            uchar byte = qMin(fabs(gaussArray[index]), 1.) * 0xff;
+            image.setPixel(j, i, byte * 0x010101);
+        }
+    }
 
     repaint();
 }
