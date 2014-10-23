@@ -64,8 +64,8 @@ void DrawWidget::fillArray() {
 void DrawWidget::smooth() {
     /* Apply Gaussian filter */
     QTextStream(stdout) << "Applying Gaussian filter..." << endl;
-    for (int i = 0; i < height(); ++i) {
-        for (int j = 0; j < width(); ++j) {
+    for (int i = 0; i < width(); ++i) {
+        for (int j = 0; j < height(); ++j) {
             for (int k = 0; k < diameter * diameter; ++k) {
                 int diff_i = (k / diameter) - radius;
                 int diff_j = (k % diameter) - radius;
