@@ -8,13 +8,13 @@
 int main(int argc, char **argv) {
     QApplication app(argc, argv);
 
-    DrawWidget drawWidget(QSize(128, 128));
     QMainWindow window;
-
+    QWidget mainWidget;
     QVBoxLayout layout;
+    DrawWidget drawWidget(QSize(128, 128));
+
     layout.addWidget(&drawWidget, 0, Qt::AlignCenter);
 
-    QWidget mainWidget;
     mainWidget.setLayout(&layout);
 
     QAction fillArrayAction("Fill array", &window);
