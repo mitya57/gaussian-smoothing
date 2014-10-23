@@ -13,12 +13,14 @@ private:
     void paintEvent(QPaintEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
-    void smooth();
 public:
     DrawWidget(QSize size, QWidget *parent = 0):
-    QWidget(parent),
-    image(size, QImage::Format_Mono) {
+        QWidget(parent),
+        image(size, QImage::Format_Mono)
+    {
         setFixedSize(size);
         image.fill(Qt::color1);
     }
+public slots:
+    void smooth();
 };
