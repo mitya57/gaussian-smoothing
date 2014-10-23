@@ -65,7 +65,7 @@ void DrawWidget::invertSign(QPoint const &point) {
                 processQueue.enqueue(neighbourNum);
             }
         }
-        image.setPixel(ind, !bitArray.value(num));
+        bitArray.setValue(num, !bitArray.value(num));
         distArray[num] = -distArray[num];
         processedSet.insert(num);
     }
