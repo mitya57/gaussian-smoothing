@@ -1,4 +1,6 @@
 #include <cmath>
+#include <QtCore/QQueue>
+#include <QtCore/QSet>
 #include <QtCore/QTextStream>
 #include <QtGui/QColor>
 #include <QtGui/QPainter>
@@ -39,7 +41,35 @@ void DrawWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 void DrawWidget::invertSign(QPoint const &point) {
-    /* TODO: do something useful here */
+    BitArray bitArray(image.bits());
+    PixelArray array = {&bitArray, image.size()};
+
+    QQueue<unsigned> processQueue;
+    QSet<unsigned> processedSet;
+
+    processQueue.enqueue(array.num(point));
+
+    while (!processQueue.isEmpty()) {
+        unsigned num = processQueue.dequeue();
+        if (processedSet.contains(num)) {
+            continue;
+        }
+        QPoint ind = array.index2d(num);
+        for (unsigned j = 1; j <= 7; j += 2) {
+            QPoint neighbour;
+            if (!getNeighbour(ind, size(), j, neighbour)) {
+                continue;
+            }
+            unsigned neighbourNum = array.num(neighbour);
+            if (!processedSet.contains(neighbourNum) && bitArray.value(neighbourNum)) {
+                processQueue.enqueue(neighbourNum);
+            }
+        }
+        image.setPixel(ind, !bitArray.value(num));
+        distArray[num] = -distArray[num];
+        processedSet.insert(num);
+    }
+    repaint();
 }
 
 void DrawWidget::fillArray() {
