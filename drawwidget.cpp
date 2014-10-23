@@ -30,17 +30,20 @@ void DrawWidget::mouseMoveEvent(QMouseEvent *event) {
 
 void DrawWidget::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
+        invertSign(event->pos());
+    } else if (event->button() == Qt::MiddleButton) {
         smooth();
     } else {
         previousPoint = event->pos();
     }
 }
 
-void DrawWidget::smooth() {
-    /* Extract the bits */
-    int width = image.width();
-    int height = image.height();
+void DrawWidget::invertSign(QPoint const &point) {
+    /* TODO: do something useful here */
+}
 
+void DrawWidget::fillArray() {
+    /* Extract the bits */
     BitArray bitArray(image.bits());
 
     PixelArray array = {
@@ -51,42 +54,31 @@ void DrawWidget::smooth() {
     };
 
     /* And then create a distArray from it */
-    qreal *distArray = new qreal[width * height];
-    qreal *gaussArray = new qreal[width * height];
-    memset(gaussArray, 0, width * height * sizeof(qreal));
+    memset(gaussArray, 0, width() * height() * sizeof(qreal));
 
     QTextStream(stdout) << "Filling distance array..." << endl;
     fillDistanceArray(array, distArray);
+    QTextStream(stdout) << "Done!" << endl;
+}
 
+void DrawWidget::smooth() {
     /* Apply Gaussian filter */
     QTextStream(stdout) << "Applying Gaussian filter..." << endl;
-    for (int i = 0; i < height; ++i) {
-        for (int j = 0; j < width; ++j) {
+    for (int i = 0; i < height(); ++i) {
+        for (int j = 0; j < width(); ++j) {
             for (int k = 0; k < diameter * diameter; ++k) {
                 int diff_i = (k / diameter) - radius;
                 int diff_j = (k % diameter) - radius;
                 int new_i = i + diff_i;
                 int new_j = j + diff_j;
-                if (new_i > 0 && new_i < height && new_j > 0 && new_j < height) {
-                    gaussArray[i * width + j] +=
-                        distArray[new_i * width + new_j] * gaussianFilter(diff_i, diff_j);
+                if (new_i > 0 && new_i < height() && new_j > 0 && new_j < width()) {
+                    gaussArray[i * width() + j] +=
+                        distArray[new_i * width() + new_j] * gaussianFilter(diff_i, diff_j);
                 }
             }
         }
     }
     QTextStream(stdout) << "Done!" << endl;
 
-    image = QImage(size(), QImage::Format_RGB32);
-
-    // FIXME: access pixel data directly, for speed
-    for (int i = 0; i < width; ++i) {
-        for (int j = 0; j < height; ++j) {
-            int index = j * width + i;
-            image.setPixel(i, j, QColor(Qt::white).darker(100 * gaussArray[index]).rgb());
-        }
-    }
-
-    delete[] distArray;
-    delete[] gaussArray;
     repaint();
 }
