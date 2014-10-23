@@ -30,6 +30,11 @@ struct PixelArray {
     }
 };
 
+bool getNeighbour(QPoint    currentInd,
+                  QSize     size,
+                  unsigned  j,
+                  QPoint   &neighbour);
+
 void fillDistanceArray(PixelArray const &array,
                        qreal            *distArray);
 

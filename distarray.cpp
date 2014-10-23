@@ -4,6 +4,19 @@
 #include <QtCore/QTextStream>
 #include "distarray.h"
 
+bool getNeighbour(QPoint currentInd, QSize size, unsigned j, QPoint &neighbour) {
+    if (j == 4) {
+        return false;
+    }
+    QPoint diff(j % 3, j / 3);
+    if (!(currentInd.x() || diff.x()) || !(currentInd.y() || diff.y())) {
+        return false;
+    }
+    neighbour.setX(currentInd.x() + diff.x() - 1);
+    neighbour.setY(currentInd.y() + diff.y() - 1);
+    return (neighbour.x() < size.width()) && (neighbour.y() < size.height());
+}
+
 void fillDistanceArray(PixelArray const &array,
                        qreal            *distArray)
 /* We expect that distArray points to a memory of the same
@@ -57,20 +70,8 @@ void fillDistanceArray(PixelArray const &array,
         QPoint currentInd = array.index2d(currentNum);
 
         for (unsigned char j = 0; j < 9; ++j) {
-            QPoint diff(j % 3,   j / 3);
-            if (
-                j == 4 || /* equal to currentInd */
-                !(currentInd.x() || diff.x()) ||
-                !(currentInd.y() || diff.y())
-            ) {
-                continue;
-            }
-            neighbour.setX(currentInd.x() + diff.x() - 1);
-            neighbour.setY(currentInd.y() + diff.y() - 1);
-            if (
-                neighbour.x() >= array.size.width() ||
-                neighbour.y() >= array.size.height()
-            ) {
+            QPoint diff(j % 3, j / 3);
+            if (!getNeighbour(currentInd, array.size, j, neighbour)) {
                 continue;
             }
 
