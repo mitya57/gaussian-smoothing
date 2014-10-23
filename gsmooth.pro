@@ -1,4 +1,4 @@
-CONFIG += c++11 debug
+CONFIG += c++11 release
 QT += widgets
 
 SOURCES += drawwidget.cpp distarray.cpp main.cpp
