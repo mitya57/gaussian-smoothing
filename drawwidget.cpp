@@ -45,13 +45,7 @@ void DrawWidget::invertSign(QPoint const &point) {
 void DrawWidget::fillArray() {
     /* Extract the bits */
     BitArray bitArray(image.bits());
-
-    PixelArray array = {
-        &bitArray,
-        QPointF(0., 0.),
-        QSizeF(1., 1.),
-        image.size()
-    };
+    PixelArray array = {&bitArray, image.size()};
 
     /* And then create a distArray from it */
     memset(gaussArray, 0, width() * height() * sizeof(qreal));

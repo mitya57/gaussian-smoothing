@@ -2,15 +2,11 @@
 #define __DISTARRAY_H
 
 #include <QtCore/QPoint>
-#include <QtCore/QPointF>
 #include <QtCore/QSize>
-#include <QtCore/QSizeF>
 #include "bitarray.h"
 
 struct PixelArray {
     BitArray *pixels;
-    QPointF start;
-    QSizeF pixelSize;
     QSize size;
 
     inline bool verifyIndex(QPoint const &index) const {
@@ -31,12 +27,6 @@ struct PixelArray {
     }
     inline bool operator [](unsigned index) const {
         return pixels->value(index);
-    }
-    inline QPointF getPixelCenter(QPoint const &index) const {
-        return QPointF(
-           start.x() + pixelSize.width() * (.5 + index.x()),
-           start.y() + pixelSize.height() * (.5 + index.y())
-        );
     }
 };
 

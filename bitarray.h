@@ -1,7 +1,6 @@
 #ifndef __BITARRAY_H
 #define __BITARRAY_H
 
-#include <cstdlib>
 #include <cstring>
 
 class BitArray {
@@ -9,33 +8,6 @@ private:
     typedef unsigned char Byte;
     Byte *data;
     bool memoryAllocated;
-
-    class Reference {
-    private:
-        const BitArray *parent;
-        const size_t index;
-
-    public:
-        Reference(BitArray *p, size_t i):
-        parent(p), index(i) {}
-
-        operator bool() const {
-            return parent->value(index);
-        }
-
-        Reference &operator = (bool value) {
-            parent->setValue(index, value);
-            return *this;
-        }
-
-        bool operator == (bool value) const {
-            return parent->value(index) == value;
-        }
-    };
-
-    /* Not implemented */
-    BitArray(const BitArray &other);
-    BitArray &operator =(const BitArray &other);
 
 public:
     BitArray(Byte *_data):
@@ -64,10 +36,6 @@ public:
     bool value(size_t i) const {
         Byte mask = 0x80 >> (i & 7);
         return data[i >> 3] & mask;
-    }
-
-    Reference operator [](size_t i) {
-        return Reference(this, i);
     }
 };
 

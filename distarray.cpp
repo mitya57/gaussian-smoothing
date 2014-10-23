@@ -75,8 +75,8 @@ void fillDistanceArray(PixelArray const &array,
             }
 
             dist = distArray[currentNum] + qSqrt(
-                qPow(array.pixelSize.width() * (diff.x() - 1), 2) +
-                qPow(array.pixelSize.height() * (diff.y() - 1), 2)
+                qPow(diff.x() - 1, 2) +
+                qPow(diff.y() - 1, 2)
             );
             num = array.num(neighbour);
             if (distArray[num] < -.5) {
