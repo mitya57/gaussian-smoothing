@@ -1,0 +1,11 @@
+This program smoothes the contours using Gaussian filter.
+
+Requirements:
+
+* C++11 capable compiler;
+* Qt 5.x (QtCore, QtGui and QtWidgets).
+
+Compiling:
+
+* `qmake`
+* `make`
