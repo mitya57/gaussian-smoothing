@@ -22,12 +22,14 @@ void DrawWidget::paintEvent(QPaintEvent *event) {
 }
 
 void DrawWidget::mouseMoveEvent(QMouseEvent *event) {
-    QPainter painter;
-    painter.begin(&image);
-    painter.drawLine(previousPoint, event->pos());
-    painter.end();
-    repaint();
-    previousPoint = event->pos();
+    if (event->buttons() & Qt::LeftButton) {
+        QPainter painter;
+        painter.begin(&image);
+        painter.drawLine(previousPoint, event->pos());
+        painter.end();
+        repaint();
+        previousPoint = event->pos();
+    }
 }
 
 void DrawWidget::mousePressEvent(QMouseEvent *event) {
@@ -35,7 +37,7 @@ void DrawWidget::mousePressEvent(QMouseEvent *event) {
         invertSign(event->pos());
     } else if (event->button() == Qt::MiddleButton) {
         smooth();
-    } else {
+    } else if (event->button() == Qt::LeftButton) {
         previousPoint = event->pos();
     }
 }
