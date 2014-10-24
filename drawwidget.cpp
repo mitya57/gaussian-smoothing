@@ -7,8 +7,8 @@
 #include "drawwidget.h"
 #include "distarray.h"
 
-static const double sigma = 1;
-static const int radius = 5;
+static const double sigma = 3;
+static const int radius = 20;
 static const int diameter = 2 * radius + 1;
 
 double gaussianFilter(double x, double y) {
